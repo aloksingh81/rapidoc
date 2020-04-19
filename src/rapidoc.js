@@ -54,7 +54,7 @@ export default class RapiDoc extends LitElement {
       sortTags: { type: String, attribute: 'sort-tags' },
       sortEndpointsBy: { type: String, attribute: 'sort-endpoints-by' },
       specFile: { type: String, attribute: false },
-    
+
       // UI Layouts
       layout: { type: String },
       renderStyle: { type: String, attribute: 'render-style' },
@@ -63,7 +63,7 @@ export default class RapiDoc extends LitElement {
       schemaExpandLevel: { type: Number, attribute: 'schema-expand-level' },
       schemaDescriptionExpanded: { type: String, attribute: 'schema-description-expanded' },
       responseAreaHeight: { type: String, attribute: 'response-area-height' },
-    
+
       // API Server
       apiKeyName: { type: String, attribute: 'api-key-name' },
       apiKeyLocation: { type: String, attribute: 'api-key-location' },
@@ -71,7 +71,7 @@ export default class RapiDoc extends LitElement {
       defaultApiServerUrl: { type: String, attribute: 'default-api-server' },
       serverUrl: { type: String, attribute: 'server-url' },
       oauthReceiver: { type: String, attribute: 'oauth-receiver' },
-    
+
       // Hide/Show Sections & Enable Disable actions
       showHeader: { type: String, attribute: 'show-header' },
       showInfo: { type: String, attribute: 'show-info' },
@@ -82,7 +82,7 @@ export default class RapiDoc extends LitElement {
       allowSearch: { type: String, attribute: 'allow-search' },
       allowServerSelection: { type: String, attribute: 'allow-server-selection' },
       showComponents: { type: String, attribute: 'show-components' },
-    
+
       // Main Colors and Font
       theme: { type: String },
       bgColor: { type: String, attribute: 'bg-color' },
@@ -91,7 +91,7 @@ export default class RapiDoc extends LitElement {
       primaryColor: { type: String, attribute: 'primary-color' },
       regularFont: { type: String, attribute: 'regular-font' },
       monoFont: { type: String, attribute: 'mono-font' },
-    
+
       // Nav Bar Colors
       navBgColor: { type: String, attribute: 'nav-bg-color' },
       navTextColor: { type: String, attribute: 'nav-text-color' },
@@ -100,10 +100,10 @@ export default class RapiDoc extends LitElement {
       navAccentColor: { type: String, attribute: 'nav-accent-color' },
       navItemSpacing: { type: String, attribute: 'nav-item-spacing' },
       infoDescriptionHeadingsInNavBar: { type: String, attribute: 'info-description-headings-in-navbar' },
-    
+
       // Filters
       matchPaths: { type: String, attribute: 'match-paths' },
-    
+
     };
   }
 
@@ -129,7 +129,7 @@ export default class RapiDoc extends LitElement {
 
     if (!this.showComponents || !'true false'.includes(this.showComponents)) { this.showComponents = 'false'; }
     if (!this.infoDescriptionHeadingsInNavBar || !'true, false,'.includes(`${this.infoDescriptionHeadingsInNavBar},`)) { this.infoDescriptionHeadingsInNavBar = 'false'; }
-    
+
     marked.setOptions({
       highlight: (code, lang) => {
         if (Prism.languages[lang]) {
@@ -138,7 +138,7 @@ export default class RapiDoc extends LitElement {
         return code;
       },
     });
-    
+
     window.addEventListener('hashchange', () => {
       this.scrollTo(window.location.hash.substring(1));
     }, true);
@@ -852,14 +852,14 @@ export default class RapiDoc extends LitElement {
       const methodType = (method && method.length === 2) ? method[1] : null;
       path = pathInput.match(new RegExp('/([^/]+)/?$'));
       const pathValue = (path && path.length === 2) ? path[0] : null;
-    
+
       if (methodType && pathValue && methodType === v.method && pathValue === v.path) {
         v.expanded = expandOperation;
         tag.expanded = true;
       }
     }));
     this.requestUpdate();
-    
+
     if (scrollToElement) {
       // delay required, else we cant find element
       window.setTimeout(() => {

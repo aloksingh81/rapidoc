@@ -1616,7 +1616,7 @@ base@^0.11.1:
     component-emitter "^1.2.1"
     define-property "^1.0.0"
     isobject "^3.0.1"
-    mixin-deep "^1.2.0"
+    mixin-deep "^1.3.2"
     pascalcase "^0.1.1"
 
 batch@0.6.1:
@@ -4055,7 +4055,7 @@ global-prefix@^3.0.0:
   integrity sha512-awConJSVCHVGND6x3tmMaKcQvwXLhjdkmomy2W+Goaui8YPgYgXJZewhg3fWC+DlfqqQuWg8AwqjGTD2nAPVWg==
   dependencies:
     ini "^1.3.5"
-    kind-of "^6.0.2"
+    kind-of "^6.0.3"
     which "^1.3.1"
 
 globals@^11.1.0:
@@ -7185,8 +7185,8 @@ set-value@^0.4.3:
     is-plain-object "^2.0.1"
     to-object-path "^0.3.0"
 
-set-value@^2.0.0:
-  version "2.0.0"
+set-value@^2.0.1:
+  version "2.0.1"
   resolved "https://registry.yarnpkg.com/set-value/-/set-value-2.0.0.tgz#71ae4a88f0feefbbf52d1ea604f3fb315ebb6274"
   integrity sha512-hw0yxk9GT/Hr5yJEYnHNKYXkIA8mVJgd9ditYZCe16ZczcaELYYcfvaXesNACk2O8O0nTiPQcQhGUQj8JLzeeg==
   dependencies:
