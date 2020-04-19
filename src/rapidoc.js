@@ -54,7 +54,7 @@ export default class RapiDoc extends LitElement {
       sortTags: { type: String, attribute: 'sort-tags' },
       sortEndpointsBy: { type: String, attribute: 'sort-endpoints-by' },
       specFile: { type: String, attribute: false },
-
+    
       // UI Layouts
       layout: { type: String },
       renderStyle: { type: String, attribute: 'render-style' },
@@ -63,7 +63,7 @@ export default class RapiDoc extends LitElement {
       schemaExpandLevel: { type: Number, attribute: 'schema-expand-level' },
       schemaDescriptionExpanded: { type: String, attribute: 'schema-description-expanded' },
       responseAreaHeight: { type: String, attribute: 'response-area-height' },
-
+    
       // API Server
       apiKeyName: { type: String, attribute: 'api-key-name' },
       apiKeyLocation: { type: String, attribute: 'api-key-location' },
@@ -71,7 +71,7 @@ export default class RapiDoc extends LitElement {
       defaultApiServerUrl: { type: String, attribute: 'default-api-server' },
       serverUrl: { type: String, attribute: 'server-url' },
       oauthReceiver: { type: String, attribute: 'oauth-receiver' },
-
+    
       // Hide/Show Sections & Enable Disable actions
       showHeader: { type: String, attribute: 'show-header' },
       showInfo: { type: String, attribute: 'show-info' },
@@ -82,7 +82,7 @@ export default class RapiDoc extends LitElement {
       allowSearch: { type: String, attribute: 'allow-search' },
       allowServerSelection: { type: String, attribute: 'allow-server-selection' },
       showComponents: { type: String, attribute: 'show-components' },
-
+    
       // Main Colors and Font
       theme: { type: String },
       bgColor: { type: String, attribute: 'bg-color' },
@@ -91,7 +91,7 @@ export default class RapiDoc extends LitElement {
       primaryColor: { type: String, attribute: 'primary-color' },
       regularFont: { type: String, attribute: 'regular-font' },
       monoFont: { type: String, attribute: 'mono-font' },
-
+    
       // Nav Bar Colors
       navBgColor: { type: String, attribute: 'nav-bg-color' },
       navTextColor: { type: String, attribute: 'nav-text-color' },
@@ -100,10 +100,10 @@ export default class RapiDoc extends LitElement {
       navAccentColor: { type: String, attribute: 'nav-accent-color' },
       navItemSpacing: { type: String, attribute: 'nav-item-spacing' },
       infoDescriptionHeadingsInNavBar: { type: String, attribute: 'info-description-headings-in-navbar' },
-
+    
       // Filters
       matchPaths: { type: String, attribute: 'match-paths' },
-
+    
     };
   }
 
@@ -111,7 +111,7 @@ export default class RapiDoc extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     if (!this.renderStyle || !'read, view,'.includes(`${this.renderStyle},`)) { this.renderStyle = 'view'; }
-    if (!this.schemaStyle || !'tree, table,'.includes(`${this.schemaStyle},`)) { this.schemaStyle = 'tree'; }
+    if (!this.schemaStyle || !'tree, table,'.includes(`${this.schemaStyle},`)) { this.schemaStyle = 'table'; }
     if (!this.theme || !'light, dark,'.includes(`${this.theme},`)) { this.theme = 'light'; }
     if (!this.defaultSchemaTab || !'example, model,'.includes(`${this.defaultSchemaTab},`)) { this.defaultSchemaTab = 'model'; }
     if (!this.schemaExpandLevel || this.schemaExpandLevel < 1) { this.schemaExpandLevel = 99999; }
@@ -129,7 +129,7 @@ export default class RapiDoc extends LitElement {
 
     if (!this.showComponents || !'true false'.includes(this.showComponents)) { this.showComponents = 'false'; }
     if (!this.infoDescriptionHeadingsInNavBar || !'true, false,'.includes(`${this.infoDescriptionHeadingsInNavBar},`)) { this.infoDescriptionHeadingsInNavBar = 'false'; }
-
+    
     marked.setOptions({
       highlight: (code, lang) => {
         if (Prism.languages[lang]) {
@@ -138,7 +138,7 @@ export default class RapiDoc extends LitElement {
         return code;
       },
     });
-
+    
     window.addEventListener('hashchange', () => {
       this.scrollTo(window.location.hash.substring(1));
     }, true);
@@ -187,14 +187,14 @@ export default class RapiDoc extends LitElement {
           --layout:${this.layout ? `${this.layout}` : 'row'};
           --font-mono:${this.monoFont ? `${this.monoFont}` : 'Monaco, "Andale Mono", "Roboto Mono", Consolas, monospace'}; 
           --font-regular:${this.regularFont ? `${this.regularFont}` : 'rapidoc, "Open Sans", BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif'};
-
+    
           --font-size-mono: 13px;
           --font-size-regular: 14px;
           --font-size-small: 12px;
           --border-radius: 2px;
           --resp-area-height: ${this.responseAreaHeight};
           --nav-item-padding: ${this.navItemSpacing === 'relaxed' ? '10px' : this.navItemSpacing === 'compact' ? '3px 10px' : '6px 10px'};
-
+    
           display:flex;
           flex-direction: column;
           min-width:360px;
@@ -215,7 +215,7 @@ export default class RapiDoc extends LitElement {
           box-sizing: border-box;
           overflow:hidden;
         }
-
+    
         .main-content { 
           margin:0;
           padding: 0; 
@@ -239,7 +239,7 @@ export default class RapiDoc extends LitElement {
         .main-content::-webkit-scrollbar-thumb {
           background-color: var(--border-color);
         }
-
+    
         .section-gap.section-tag {
           border-bottom:1px solid var(--border-color);
         }
@@ -255,11 +255,11 @@ export default class RapiDoc extends LitElement {
         .collapsed .section-tag-header:hover{
           cursor: s-resize;
         }
-
+    
         .section-tag-header:hover{
           background-image: linear-gradient(to right, rgba(0,0,0,0), var(--border-color), rgba(0,0,0,0));
         }
-
+    
         .section-tag-header:hover::after {
           position:absolute;
           margin-left:-24px;
@@ -268,7 +268,7 @@ export default class RapiDoc extends LitElement {
           color:var(--primary-color);
           content: '⬆'; 
         }
-
+    
         .collapsed .section-tag-header::after {
           position:absolute;
           margin-left:-24px;
@@ -280,11 +280,11 @@ export default class RapiDoc extends LitElement {
         .collapsed .section-tag-header:hover::after {
           color:var(--primary-color);
         }
-
+    
         .collapsed .section-tag-body {
           display:none;
         }
-
+    
         .logo {
           height:36px;
           width:36px;
@@ -307,7 +307,7 @@ export default class RapiDoc extends LitElement {
           box-sizing:border-box;
           width:100%;
         }
-
+    
         input.header-input{
           background:var(--header-color-darker);
           color:var(--header-fg);
@@ -334,7 +334,7 @@ export default class RapiDoc extends LitElement {
         }
         .expanded-endpoint-body.deprecated{ filter:opacity(0.6); }
         .divider { border-top:2px solid var(--primary-color); width:100%; }
-
+    
         .tooltip {
           cursor:pointer;
           border: 1px solid var(--border-color);
@@ -350,18 +350,18 @@ export default class RapiDoc extends LitElement {
         .tooltip:hover{
           color: var(--primary-color);
           border-color: var(--primary-color);
-
+    
         }
         .tooltip:hover .tooltip-text {
           visibility: visible;
           opacity: 1;
         }
-
+    
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-
+    
         @media only screen and (min-width: 768px) {
           .nav-bar {
             width: 260px;
@@ -387,7 +387,7 @@ export default class RapiDoc extends LitElement {
             padding:36px 0 48px 0;
           }
         }
-
+    
         @media only screen and (min-width: 1000px) {
           .nav-bar {
             width: 280px;
@@ -419,7 +419,7 @@ export default class RapiDoc extends LitElement {
                   </span>`
                 }
               </div>
-
+    
               ${this.resolvedSpec.info.description
                 ? html`${unsafeHTML(`<div class='m-markdown regular-font'>${marked(this.resolvedSpec.info.description, { renderer: this.infoDescriptionHeadingRenderer() })}</div>`)}`
                 : ''
@@ -431,12 +431,12 @@ export default class RapiDoc extends LitElement {
               ${this.resolvedSpec.info.contact ? this.contactInfoTemplate() : ''}
             </div>`
             }
-
+    
             ${(this.allowTry === 'false' || this.allowServerSelection === 'false')
               ? ''
               : this.serverTemplate()
             } 
-
+    
             ${(this.allowAuthentication === 'false' || !this.resolvedSpec.securitySchemes)
               ? ''
               : this.securitySchemeTemplate()
@@ -449,7 +449,7 @@ export default class RapiDoc extends LitElement {
                 : ''
               }
             </div>
-
+    
             ${this.showComponents === 'true' ? this.componentsTemplate() : ''}
           `
           : ''
@@ -551,7 +551,7 @@ export default class RapiDoc extends LitElement {
           ? ''
           : html`<div id='link-authentication'  class='nav-bar-info' @click = '${(e) => this.scrollToEl(e)}' > Authentication </div>`
         }
-
+    
         <span id='link-paths' class='nav-bar-section'>Operations</span>
         ${this.resolvedSpec.tags.map((tag) => html`
         
@@ -568,7 +568,7 @@ export default class RapiDoc extends LitElement {
             <span> ${p.summary || p.path} </span>
           </div>`)}
         `)}
-
+    
         ${(this.showComponents === 'false' || !this.resolvedSpec.components)
         ? ''
         : html`<div id='link-components' class='nav-bar-section' >Components</div>
@@ -852,14 +852,14 @@ export default class RapiDoc extends LitElement {
       const methodType = (method && method.length === 2) ? method[1] : null;
       path = pathInput.match(new RegExp('/([^/]+)/?$'));
       const pathValue = (path && path.length === 2) ? path[0] : null;
-
+    
       if (methodType && pathValue && methodType === v.method && pathValue === v.path) {
         v.expanded = expandOperation;
         tag.expanded = true;
       }
     }));
     this.requestUpdate();
-
+    
     if (scrollToElement) {
       // delay required, else we cant find element
       window.setTimeout(() => {
