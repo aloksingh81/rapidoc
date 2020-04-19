@@ -31,6 +31,10 @@ import serverTemplate from '@/templates/server-template';
 import securitySchemeTemplate from '@/templates/security-scheme-template';
 import componentsTemplate from '@/templates/components-template';
 
+import contactInfoTemplate from '@/templates/contact-info-template';
+import headerTemplate from '@/templates/header-template';
+import navbarTemplate from '@/templates/navbar-template';
+
 export default class RapiDoc extends LitElement {
   constructor() {
     super();
@@ -111,7 +115,7 @@ export default class RapiDoc extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     if (!this.renderStyle || !'read, view,'.includes(`${this.renderStyle},`)) { this.renderStyle = 'view'; }
-    if (!this.schemaStyle || !'tree, table,'.includes(`${this.schemaStyle},`)) { this.schemaStyle = 'table'; }
+    if (!this.schemaStyle || !'tree, table,'.includes(`${this.schemaStyle},`)) { this.schemaStyle = 'tree'; }
     if (!this.theme || !'light, dark,'.includes(`${this.theme},`)) { this.theme = 'light'; }
     if (!this.defaultSchemaTab || !'example, model,'.includes(`${this.defaultSchemaTab},`)) { this.defaultSchemaTab = 'model'; }
     if (!this.schemaExpandLevel || this.schemaExpandLevel < 1) { this.schemaExpandLevel = 99999; }
@@ -187,14 +191,14 @@ export default class RapiDoc extends LitElement {
           --layout:${this.layout ? `${this.layout}` : 'row'};
           --font-mono:${this.monoFont ? `${this.monoFont}` : 'Monaco, "Andale Mono", "Roboto Mono", Consolas, monospace'}; 
           --font-regular:${this.regularFont ? `${this.regularFont}` : 'rapidoc, "Open Sans", BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif'};
-    
+
           --font-size-mono: 13px;
           --font-size-regular: 14px;
           --font-size-small: 12px;
           --border-radius: 2px;
           --resp-area-height: ${this.responseAreaHeight};
           --nav-item-padding: ${this.navItemSpacing === 'relaxed' ? '10px' : this.navItemSpacing === 'compact' ? '3px 10px' : '6px 10px'};
-    
+
           display:flex;
           flex-direction: column;
           min-width:360px;
@@ -215,7 +219,7 @@ export default class RapiDoc extends LitElement {
           box-sizing: border-box;
           overflow:hidden;
         }
-    
+
         .main-content { 
           margin:0;
           padding: 0; 
@@ -239,7 +243,7 @@ export default class RapiDoc extends LitElement {
         .main-content::-webkit-scrollbar-thumb {
           background-color: var(--border-color);
         }
-    
+
         .section-gap.section-tag {
           border-bottom:1px solid var(--border-color);
         }
@@ -255,11 +259,11 @@ export default class RapiDoc extends LitElement {
         .collapsed .section-tag-header:hover{
           cursor: s-resize;
         }
-    
+
         .section-tag-header:hover{
           background-image: linear-gradient(to right, rgba(0,0,0,0), var(--border-color), rgba(0,0,0,0));
         }
-    
+
         .section-tag-header:hover::after {
           position:absolute;
           margin-left:-24px;
@@ -268,7 +272,7 @@ export default class RapiDoc extends LitElement {
           color:var(--primary-color);
           content: '⬆'; 
         }
-    
+
         .collapsed .section-tag-header::after {
           position:absolute;
           margin-left:-24px;
@@ -280,11 +284,11 @@ export default class RapiDoc extends LitElement {
         .collapsed .section-tag-header:hover::after {
           color:var(--primary-color);
         }
-    
+
         .collapsed .section-tag-body {
           display:none;
         }
-    
+
         .logo {
           height:36px;
           width:36px;
@@ -307,7 +311,7 @@ export default class RapiDoc extends LitElement {
           box-sizing:border-box;
           width:100%;
         }
-    
+
         input.header-input{
           background:var(--header-color-darker);
           color:var(--header-fg);
@@ -334,7 +338,7 @@ export default class RapiDoc extends LitElement {
         }
         .expanded-endpoint-body.deprecated{ filter:opacity(0.6); }
         .divider { border-top:2px solid var(--primary-color); width:100%; }
-    
+
         .tooltip {
           cursor:pointer;
           border: 1px solid var(--border-color);
@@ -350,18 +354,18 @@ export default class RapiDoc extends LitElement {
         .tooltip:hover{
           color: var(--primary-color);
           border-color: var(--primary-color);
-    
+
         }
         .tooltip:hover .tooltip-text {
           visibility: visible;
           opacity: 1;
         }
-    
+
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-    
+
         @media only screen and (min-width: 768px) {
           .nav-bar {
             width: 260px;
@@ -387,7 +391,7 @@ export default class RapiDoc extends LitElement {
             padding:36px 0 48px 0;
           }
         }
-    
+
         @media only screen and (min-width: 1000px) {
           .nav-bar {
             width: 280px;
@@ -399,9 +403,9 @@ export default class RapiDoc extends LitElement {
         }
       </style>
       
-    ${this.showHeader === 'false' ? '' : this.headerTemplate()}
+    ${this.showHeader === 'false' ? '' : headerTemplate.call(this)}
     <div class="body">
-      ${this.renderStyle === 'read' && this.resolvedSpec ? this.navBarTemplate() : ''}
+      ${this.renderStyle === 'read' && this.resolvedSpec ? navbarTemplate.call(this) : ''}
       
       <div class="main-content regular-font ${this.renderStyle === 'read' ? 'main-content--read-mode' : ''} " style = "${this.renderStyle === 'read' ? 'padding:0' : ''}">
         <slot></slot>
@@ -419,7 +423,7 @@ export default class RapiDoc extends LitElement {
                   </span>`
                 }
               </div>
-    
+
               ${this.resolvedSpec.info.description
                 ? html`${unsafeHTML(`<div class='m-markdown regular-font'>${marked(this.resolvedSpec.info.description, { renderer: this.infoDescriptionHeadingRenderer() })}</div>`)}`
                 : ''
@@ -428,29 +432,29 @@ export default class RapiDoc extends LitElement {
                 ? html`${unsafeHTML(`<div class='tiny-title' style="margin-top:8px"> Terms: </div> <span class='m-markdown regular-font'>${marked(this.resolvedSpec.info.termsOfService)}</span>`)}`
                 : ''
               }
-              ${this.resolvedSpec.info.contact ? this.contactInfoTemplate() : ''}
+              ${this.resolvedSpec.info.contact ? contactInfoTemplate.call(this) : ''}
             </div>`
             }
-    
+
             ${(this.allowTry === 'false' || this.allowServerSelection === 'false')
               ? ''
-              : this.serverTemplate()
+              : serverTemplate.call(this)
             } 
-    
+
             ${(this.allowAuthentication === 'false' || !this.resolvedSpec.securitySchemes)
               ? ''
-              : this.securitySchemeTemplate()
+              : securitySchemeTemplate.call(this)
             }
             <div @click="${(e) => { this.handleHref(e); }}">
               ${this.resolvedSpec.tags
                 ? this.renderStyle === 'read'
-                  ? this.expandedEndpointTemplate()
-                  : this.endpointTemplate()
+                  ? expandedEndpointTemplate.call(this)
+                  : endpointTemplate.call(this)
                 : ''
               }
             </div>
-    
-            ${this.showComponents === 'true' ? this.componentsTemplate() : ''}
+
+            ${this.showComponents === 'true' ? componentsTemplate.call(this) : ''}
           `
           : ''
         }
@@ -458,186 +462,6 @@ export default class RapiDoc extends LitElement {
       </div>
     </div>  
   `;
-  }
-
-  headerTemplate() {
-    return html`
-      <div class="row header regular-font" style="padding:8px 4px 8px 4px;min-height:48px;">
-        <div class="only-large-screen-flex" style="align-items: center;">
-          <slot name="logo" class="logo">
-            ${this.logoTemplate('height:36px;width:36px;margin-left:5px')}
-            <!-- m-logo style="height:36px;width:36px;margin-left:5px"></m-logo -->
-          </slot>  
-          <div class="header-title">${this.headingText}</div>
-        </div>  
-        <div style="margin: 0px 8px;display:flex;flex:1">
-          ${(this.allowSpecUrlLoad === 'false')
-            ? ''
-            : html`
-              <input id="spec-url" type="text" style="font-size:var(--font-size-small)" class="header-input mono-font" placeholder="Spec URL" value="${this.specUrl ? this.specUrl : ''}" @change="${this.onSepcUrlChange}" spellcheck="false" >
-              <div style="margin: 6px 5px 0 -24px; font-size:var(--title-font-size); cursor:pointer;">&#x2b90;</div> 
-            `
-          } 
-          ${(this.allowSpecFileLoad === 'false')
-            ? ''
-            : html`
-              <input id="spec-file" type="file" style="display:none" value="${this.specFile ? this.specFile : ''}" @change="${this.onSepcFileChange}" spellcheck="false" >
-              <button class="m-btn primary only-large-screen" style="margin-left:10px;"  @click="${this.onFileLoadClick}"> LOCAL JSON FILE </button>
-            `
-          }
-          <slot name="header"></slot>
-          ${(this.allowSearch === 'false' || this.renderStyle === 'read')
-            ? ''
-            : html`  
-              <input id="search" class="header-input" type="text"  placeholder="search" @change="${this.onSearchChange}" style="max-width:130px;margin-left:10px;" spellcheck="false" >
-              <div style="margin: 6px 5px 0 -24px; font-size:var(--title-font-size); cursor:pointer;">&#x2b90;</div>
-            `
-          }
-        </div>
-      </div>`;
-  }
-
-  navBarTemplate() {
-    return html`
-      <div class='nav-bar'>
-        <div style="padding:16px 30px 0 16px;">
-          <slot name="nav-logo" class="logo"></slot>
-        </div>
-        ${(this.allowSearch === 'false')
-          ? ''
-          : html`
-            <div style="position:sticky; top:0; display:flex; flex-direction:row; align-items: stretch; padding:24px; background: var(--nav-bg-color); border-bottom: 1px solid var(--nav-hover-bg-color)">
-              <div style="display:flex; flex:1">
-                <input id="nav-bar-search" 
-                  style="width:100%; padding-right:20px; color:var(--nav-hover-text-color); border-color:var(--nav-accent-color); background-color:var(--nav-hover-bg-color)" 
-                  type="text" placeholder="search" 
-                  @change="${this.onSearchChange}"  
-                  spellcheck="false" 
-                >
-                <div style="margin: 6px 5px 0 -24px; font-size:var(--title-font-size); cursor:pointer;">&#x2b90;</div>
-              </div>  
-              ${this.matchPaths
-                ? html`
-                  <div style='margin-left:5px; cursor:pointer; align-self:center; color:var(--nav-text-color)' class='small-font-size primary-text bold-text' @click = '${this.onClearSearch}'> CLEAR </div>`
-                : ''
-              }
-            </div>
-          `
-        }
-        ${html`<div class='nav-scroll'>
-          ${(this.showInfo === 'false' || !this.resolvedSpec.info)
-            ? ''
-            : html`
-              ${(this.infoDescriptionHeadingsInNavBar === 'true')
-                ? html`
-                  ${this.resolvedSpec.infoDescriptionHeaders.length > 0 ? html`<div id='link-overview' class='nav-bar-info'  @click = '${(e) => this.scrollToEl(e)}' > Overview </div>` : ''}          
-                  ${this.resolvedSpec.infoDescriptionHeaders.map((header) => html`
-                    <div class='nav-bar-h${header.depth}' id="link-${new marked.Slugger().slug(header.text)}" @click='${(e) => this.scrollToEl(e)}'>
-                      ${header.text}
-                    </div>`)
-                  }
-                  ${this.resolvedSpec.infoDescriptionHeaders.length > 0 ? html`<hr style='border-top: 1px solid var(--nav-hover-bg-color); border-width:1px 0 0 0; margin: 15px 0 0 0'/>` : ''}
-                `
-                : html`<div id='link-overview' class='nav-bar-info'  @click = '${(e) => this.scrollToEl(e)}' > Overview </div>`
-              }
-            `
-          }
-        
-        ${(this.allowTry === 'false' || this.allowServerSelection === 'false')
-          ? ''
-          : html`<div id='link-api-servers' class='nav-bar-info' @click = '${(e) => this.scrollToEl(e)}' > API Servers </div>`
-        }
-        ${(this.allowAuthentication === 'false' || !this.resolvedSpec.securitySchemes)
-          ? ''
-          : html`<div id='link-authentication'  class='nav-bar-info' @click = '${(e) => this.scrollToEl(e)}' > Authentication </div>`
-        }
-    
-        <span id='link-paths' class='nav-bar-section'>Operations</span>
-        ${this.resolvedSpec.tags.map((tag) => html`
-        
-          <div class='nav-bar-tag' id="link-${tag.name.replace(invalidCharsRegEx, '-')}" @click='${(e) => this.scrollToEl(e)}'>
-            ${tag.name}
-          </div>
-          ${tag.paths.filter((v) => {
-            if (this.matchPaths) {
-              return pathIsInSearch(this.matchPaths, v);
-            }
-            return true;
-          }).map((p) => html`
-          <div class='nav-bar-path' id='link-${p.method}-${p.path.replace(invalidCharsRegEx, '-')}' @click='${(e) => this.scrollToEl(e)}'> 
-            <span> ${p.summary || p.path} </span>
-          </div>`)}
-        `)}
-    
-        ${(this.showComponents === 'false' || !this.resolvedSpec.components)
-        ? ''
-        : html`<div id='link-components' class='nav-bar-section' >Components</div>
-          ${this.resolvedSpec.components.map((component) => html`
-            <div class='nav-bar-tag' id="link-cmp-${component.name.toLowerCase()}" @click='${(e) => this.scrollToEl(e)}'>
-              ${component.name}
-            </div>
-            ${component.subComponents.map((p) => html`
-            <div class='nav-bar-path' id='link-cmp-${p.id}' @click='${(e) => this.scrollToEl(e)}'> 
-              <span> ${p.name} </span>
-            </div>`)}
-          `)}
-        `}
-        
-        </div>`
-        }
-        <!-- div class="cover-scroll-bar"></div -->
-      </div>
-    `;
-  }
-
-  contactInfoTemplate() {
-    return html`
-    <div style="font-size:calc(var(--font-size-regular) - 1px); margin-top:8px; line-height: 18px;">
-      ${this.resolvedSpec.info.contact.email
-        ? html`
-          <div>
-            <span class='tiny-title' style="display:inline-block; width:50px"> Email: </span> 
-            <span class='regular-font'> ${this.resolvedSpec.info.contact.email}</span> 
-          </div>`
-        : ''
-      }
-      ${this.resolvedSpec.info.contact.name
-        ? html`
-          <div>
-            <span class='tiny-title' style="display:inline-block; width:50px"> Name: </span> 
-            <span class='regular-font'> ${this.resolvedSpec.info.contact.name}</span> 
-          </div>`
-        : ''
-      }
-      ${this.resolvedSpec.info.contact.url
-        ? html`
-          <div>
-            <span class='tiny-title' style="display:inline-block; width:50px"> URL: </span> 
-            <span class='regular-font'> ${this.resolvedSpec.info.contact.url}</span> 
-          </div>`
-        : ''
-      }
-    </div>`;
-  }
-
-  serverTemplate() {
-    return serverTemplate.call(this);
-  }
-
-  securitySchemeTemplate() {
-    return securitySchemeTemplate.call(this);
-  }
-
-  expandedEndpointTemplate() {
-    return expandedEndpointTemplate.call(this);
-  }
-
-  endpointTemplate() {
-    return endpointTemplate.call(this);
-  }
-
-  componentsTemplate() {
-    return componentsTemplate.call(this);
   }
 
   /* eslint-enable indent */
@@ -937,21 +761,6 @@ export default class RapiDoc extends LitElement {
     if (gotoEl) {
       this.expandTreeToPath(path, expandPath, true);
     }
-  }
-
-  logoTemplate(style) {
-    return html`
-    <div style=${style}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="1 0 511 512">
-        <path d="M351 411a202 202 0 01-350 0 203 203 0 01333-24 203 203 0 0117 24zm0 0" fill="#adc165"/>
-        <path d="M334 387a202 202 0 01-216-69 202 202 0 01216 69zm78 32H85a8 8 0 01-8-8 8 8 0 018-8h327a8 8 0 017 8 8 8 0 01-7 8zm0 0" fill="#99aa52"/>
-        <path d="M374 338l-5 30a202 202 0 01-248-248 203 203 0 01253 218zm0 0" fill="#ffc73b"/>
-        <path d="M374 338a202 202 0 01-100-197 203 203 0 01100 197zm38 81l-6-2-231-231a8 8 0 0111-11l231 230a8 8 0 01-5 14zm0 0" fill="#efb025"/>
-        <path d="M311 175c0 75 40 140 101 175a202 202 0 000-350 202 202 0 00-101 175zm0 0" fill="#ff903e"/>
-        <path d="M412 419a8 8 0 01-8-8V85a8 8 0 0115 0v326a8 8 0 01-7 8zm0 0" fill="#e87425"/>
-      </svg>
-    </div>    
-    `;
   }
 }
 customElements.define('rapi-doc', RapiDoc);
